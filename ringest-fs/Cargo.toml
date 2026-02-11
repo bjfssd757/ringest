@@ -1,0 +1,11 @@
+[package]
+name = "ringest-fs"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+regex = ["dep:regex"]
+default = ["regex"]
+
+[dependencies]
+regex = { version = "1.12.3", optional = true }
