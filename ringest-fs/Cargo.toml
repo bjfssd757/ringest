@@ -8,4 +8,5 @@ regex = ["dep:regex"]
 default = ["regex"]
 
 [dependencies]
+dashmap = "6.1.0"
 regex = { version = "1.12.3", optional = true }

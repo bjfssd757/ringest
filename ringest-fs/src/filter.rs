@@ -1,4 +1,4 @@
-use std::{ops::{Bound, RangeBounds}, time::SystemTime};
+use std::{fs::Metadata, ops::{Bound, RangeBounds}, time::SystemTime};
 
 #[derive(Default)]
 pub struct Filter {
@@ -229,5 +229,30 @@ impl Filter {
     #[inline]
     pub fn check_all_ranges(&self, file_time: SystemTime) -> bool {
         self.check_accessed(file_time) && self.check_created(file_time) && self.check_modified(file_time)
+    }
+
+    pub fn matches_access(&self, metadata: &Metadata) -> bool {
+        let Some(target_mode) = self.access_mode else { return true };
+
+        let permissions = metadata.permissions();
+        let is_readonly = permissions.readonly();
+
+        match target_mode {
+            AccessMode::ReadOnly => is_readonly,
+            AccessMode::WriteOnly | AccessMode::ReadWrite => {
+                if cfg!(windows) {
+                    !is_readonly
+                } else {
+                    #[cfg(unix)]
+                    {
+                        use std::os::unix::fs::PermissionsExt;
+                        let mode = permissions.mode();
+                        (mode & 0o222) != 0
+                    }
+                    #[cfg(not(unix))]
+                    !is_readonly
+                }
+            }
+        }
     }
 }
