@@ -10,3 +10,4 @@ default = ["regex"]
 [dependencies]
 dashmap = "6.1.0"
 regex = { version = "1.12.3", optional = true }
+tokio = { version = "1.49.0", features = ["full"] }

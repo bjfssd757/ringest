@@ -1,8 +1,11 @@
+use std::io::{Write, stderr};
+
 
 #[derive(Debug)]
 pub enum ErrorKind {
     IoError(std::io::ErrorKind),
-    SearchError(SearchErrorKind)
+    SearchError(SearchErrorKind),
+    Other
 }
 
 #[derive(Debug)]
@@ -16,7 +19,9 @@ pub struct Error {
 }
 
 impl Error {
-    pub fn new(kind: ErrorKind) -> Self {
+    pub fn new(kind: ErrorKind, message: &str) -> Self {
+        let mut stderr = stderr();
+        stderr.write_all(message.as_bytes()).unwrap();
         Self {
             kind,
         }
@@ -31,6 +36,6 @@ impl std::fmt::Display for Error {
 }
 impl From<std::io::Error> for Error {
     fn from(value: std::io::Error) -> Self {
-        Error::new(ErrorKind::IoError(value.kind()))
+        Error::new(ErrorKind::IoError(value.kind()), "IO ERROR")
     }
 }

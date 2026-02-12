@@ -226,11 +226,6 @@ impl Filter {
         true
     }
 
-    #[inline]
-    pub fn check_all_ranges(&self, file_time: SystemTime) -> bool {
-        self.check_accessed(file_time) && self.check_created(file_time) && self.check_modified(file_time)
-    }
-
     pub fn matches_access(&self, metadata: &Metadata) -> bool {
         let Some(target_mode) = self.access_mode else { return true };
 
@@ -254,5 +249,45 @@ impl Filter {
                 }
             }
         }
+    }
+
+    pub fn allows(&self, entry: &tokio::fs::DirEntry, metadata: &Metadata) -> bool {
+        let name = entry.file_name().to_string_lossy().to_string();
+
+        if let Some(ref target) = self.target_name { if &name != target { return false } }
+        if let Some(ref prefix) = self.name_prefix { if !name.starts_with(prefix) { return false } }
+        if let Some(ref suffix) = self.name_suffix { if !name.ends_with(suffix) { return false } }
+
+        if let Some(ref ext) = self.extension {
+            if !name.ends_with(&format!(".{}", ext)) { return false }
+        }
+
+        if let Some(ref excludes) = self.exclude_dirs {
+            if entry.path().is_dir() && excludes.contains(&name) { return false }
+        }
+
+        let size = metadata.len();
+        if let Some(max) = self.max_size { if size > max { return false } }
+        if let Some(min) = self.min_size { if size < min { return false } }
+
+        if !self.include_hidden && name.starts_with(".") {
+            return false
+        }
+
+        if !self.matches_access(metadata) {
+            return false
+        }
+
+        if let Ok(accessed) = metadata.accessed() {
+            if !self.check_accessed(accessed) { return false }
+        }
+        if let Ok(modified) = metadata.modified() {
+            if !self.check_modified(modified) { return false }
+        }
+        if let Ok(created) = metadata.created() {
+            if !self.check_created(created) { return false }
+        }
+
+        true
     }
 }
