@@ -19,7 +19,7 @@ bytes = "1.11.1"
 ringest-fs = { path="ringest-fs" }
 ringest-io = { path="ringest-io" }
 ringest-error = { path="ringest-error" }
-tempfile = "3"      # Для создания временных файлов
-rand = "0.8"        # Для генерации случайных данных
+tempfile = "3"
+rand = "0.8"
 tokio = { version = "1", features = ["full", "test-util"] }
-criterion = { version = "0.5", features = ["async_tokio"] } # Для замеров
+criterion = { version = "0.5", features = ["async_tokio"] }

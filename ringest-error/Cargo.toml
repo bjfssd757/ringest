@@ -2,6 +2,9 @@
 name = "ringest-error"
 version = "0.1.0"
 edition = "2024"
+repository = "https://github.com/bjfssd757/ringest"
+description = "Ringest-error is a crate with error definitions for the ringest framework"
+license = "MIT"
 
 [features]
 regex = ["dep:regex"]

@@ -2,6 +2,9 @@
 name = "ringest-io"
 version = "0.1.0"
 edition = "2024"
+repository = "https://github.com/bjfssd757/ringest"
+description = "Ringest-io is a IO crate for the ringest framework"
+license = "MIT"
 
 [dependencies]
 async-trait = "0.1.89"
@@ -9,5 +12,5 @@ bytes = "1.11.1"
 dashmap = "6.1.0"
 minstant = "0.1.7"
 parking_lot = "0.12.5"
-ringest-error = { path = "../ringest-error"}
+ringest-error = "0.1.0"
 tokio = { version = "1.49.0", features = ["full"] }
