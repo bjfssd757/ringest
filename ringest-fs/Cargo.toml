@@ -11,3 +11,7 @@ default = ["regex"]
 dashmap = "6.1.0"
 regex = { version = "1.12.3", optional = true }
 tokio = { version = "1.49.0", features = ["full"] }
+ringest-io = { path="../ringest-io" }
+ringest-error = { path="../ringest-error" }
+bytes = "1.11.1"
+lazy_static = "1.5.0"

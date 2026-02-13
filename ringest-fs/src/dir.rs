@@ -2,8 +2,8 @@ use tokio::{fs::{self, DirEntry}};
 use std::{sync::Arc, path::PathBuf};
 
 use dashmap::DashMap;
-
-use crate::{error::Error, file::File, filter::Filter};
+use ringest_error::{Error, Result};
+use crate::{file::File, filter::Filter};
 
 pub struct Directory {
     pub subdirectories: DashMap<String, Arc<DirEntry>>,
@@ -11,7 +11,7 @@ pub struct Directory {
 }
 
 impl Directory {
-    pub async fn open(path: &String, filter: Arc<Filter>) -> Result<Self, Error> {
+    pub async fn open(path: &String, filter: Arc<Filter>) -> Result<Self> {
         static DEPTH: u32 = 0;
 
         let entries = fs::read_dir(path).await?;
@@ -57,7 +57,7 @@ impl Directory {
                     Self::scan(path, filter_clone, res_d_clone, res_f_clone, depth + 1);
                 });
             } else {
-                res_f.insert(entry.file_name().to_string_lossy().into(), Arc::new(File::from_entry(&entry, &metadata).await.map_err(|_| return).unwrap()));
+                res_f.insert(entry.file_name().to_string_lossy().into(), Arc::new(File::from_entry(&entry, metadata).await.map_err(|_| return).unwrap()));
             }
         }
     }

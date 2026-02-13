@@ -3,10 +3,23 @@ name = "ringest"
 version = "0.1.0"
 edition = "2024"
 
+[[bench]]
+name = "io_bench"
+harness = false
+
 [workspace]
 resolver = "2"
 members = [
-    "ringest-fs"
+    "ringest-fs", "ringest-io", "ringest-error"
 ]
 
-[dependencies]
+[dev-dependencies]
+async-trait = "0.1.89"
+bytes = "1.11.1"
+ringest-fs = { path="ringest-fs" }
+ringest-io = { path="ringest-io" }
+ringest-error = { path="ringest-error" }
+tempfile = "3"      # Для создания временных файлов
+rand = "0.8"        # Для генерации случайных данных
+tokio = { version = "1", features = ["full", "test-util"] }
+criterion = { version = "0.5", features = ["async_tokio"] } # Для замеров
