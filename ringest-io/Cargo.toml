@@ -12,5 +12,6 @@ bytes = "1.11.1"
 dashmap = "6.1.0"
 minstant = "0.1.7"
 parking_lot = "0.12.5"
-ringest-error = { path = "../ringest-error" }
+ringest-error = "0.1.0"
+# ringest-error = { path = "../ringest-error" }
 tokio = { version = "1.49.0", features = ["full"] }
