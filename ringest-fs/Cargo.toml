@@ -15,3 +15,5 @@ ringest-io = { path="../ringest-io" }
 ringest-error = { path="../ringest-error" }
 bytes = "1.11.1"
 lazy_static = "1.5.0"
+futures = "0.3.31"
+trash = "5.2.5"

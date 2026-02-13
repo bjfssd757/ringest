@@ -132,6 +132,14 @@ impl Registry {
         self.targets.insert(id, ctx);
     }
 
+    pub fn remove(&self, id: u64) -> Result<()> {
+        if let Some(_) = self.targets.iter().find(|t| *t.key() == id) {
+            self.targets.remove(&id);
+            return Ok(())
+        }
+        Err(Error::Internal("Target with given id not found".to_string()))
+    }
+
     pub fn get_writer<T: IoTarget>(&self, id: u64) -> Option<BufferWriter<T>> {
         let ctx = self.targets.get(&id)?;
         let context = ctx.value().clone().downcast::<IoContext<T>>().ok()?;

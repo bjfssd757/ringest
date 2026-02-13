@@ -1,4 +1,6 @@
-use std::{fs::Metadata, ops::{Bound, RangeBounds}, time::SystemTime};
+use std::{fs::Metadata, ops::{Bound, RangeBounds}, sync::Arc, time::SystemTime};
+
+use crate::{dir::Directory, file::File};
 
 #[derive(Default)]
 pub struct Filter {
@@ -27,8 +29,8 @@ pub struct Filter {
 }
 
 pub enum FileType {
-    Dir,
-    File,
+    Dir(Arc<Directory>),
+    File(Arc<File>),
     Symlink,
 }
 
